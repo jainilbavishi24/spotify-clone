@@ -1,0 +1,54 @@
+.layout {
+  display: grid;
+  grid-template-areas: 
+    "sidebar main"
+    "player player";
+  grid-template-columns: 240px 1fr;
+  grid-template-rows: 1fr 90px;
+  height: 100vh;
+  background-color: #121212;
+}
+
+.layout-sidebar {
+  grid-area: sidebar;
+  background-color: #000000;
+  border-right: 1px solid #282828;
+}
+
+.layout-main {
+  grid-area: main;
+  display: flex;
+  flex-direction: column;
+  background-color: #121212;
+  overflow: hidden;
+}
+
+.layout-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 24px 24px 24px;
+}
+
+.layout-player {
+  grid-area: player;
+  background-color: #181818;
+  border-top: 1px solid #282828;
+}
+
+@media (max-width: 768px) {
+  .layout {
+    grid-template-areas: 
+      "main"
+      "player";
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 90px;
+  }
+  
+  .layout-sidebar {
+    display: none;
+  }
+  
+  .layout-content {
+    padding: 0 16px 16px 16px;
+  }
+}
