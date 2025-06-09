@@ -15,8 +15,10 @@ RUN cargo build --release && rm -rf src
 # Copy actual source code
 COPY src ./src
 COPY migrations ./migrations
+COPY sqlx-data.json ./
 
-# Build the application
+# Build the application with offline mode
+ENV SQLX_OFFLINE=true
 RUN cargo build --release
 
 # Runtime stage
