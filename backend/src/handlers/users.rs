@@ -1,5 +1,5 @@
 use actix_web::{web, HttpResponse, Responder, HttpRequest, HttpMessage};
-use sqlx::PgPool;
+use sqlx::{PgPool, Row};
 use uuid::Uuid;
 
 use crate::models::UserResponse;
@@ -27,15 +27,20 @@ async fn get_current_user(
         Err(e) => return HttpResponse::Unauthorized().json(serde_json::json!({"error": e})),
     };
 
-    match sqlx::query_as!(
-        crate::models::User,
-        "SELECT * FROM users WHERE id = $1",
-        user_id
-    )
-    .fetch_optional(pool.get_ref())
-    .await
+    match sqlx::query("SELECT id, username, email, password_hash, created_at, updated_at FROM users WHERE id = $1")
+        .bind(user_id)
+        .fetch_optional(pool.get_ref())
+        .await
     {
-        Ok(Some(user)) => {
+        Ok(Some(row)) => {
+            let user = crate::models::User {
+                id: row.get("id"),
+                username: row.get("username"),
+                email: row.get("email"),
+                password_hash: row.get("password_hash"),
+                created_at: row.get("created_at"),
+                updated_at: row.get("updated_at"),
+            };
             let user_response: UserResponse = user.into();
             HttpResponse::Ok().json(user_response)
         }

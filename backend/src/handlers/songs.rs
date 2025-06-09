@@ -141,17 +141,17 @@ async fn upload_song(
     let song_id = Uuid::new_v4();
     let now = chrono::Utc::now();
 
-    match sqlx::query!(
-        "INSERT INTO songs (id, title, artist, album, duration, file_path, created_at) 
-         VALUES ($1, $2, $3, $4, $5, $6, $7)",
-        song_id,
-        title,
-        artist,
-        album,
-        duration,
-        file_path,
-        now
+    match sqlx::query(
+        "INSERT INTO songs (id, title, artist, album, duration, file_path, created_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)"
     )
+    .bind(song_id)
+    .bind(&title)
+    .bind(&artist)
+    .bind(&album)
+    .bind(duration)
+    .bind(&file_path)
+    .bind(now)
     .execute(pool.get_ref())
     .await
     {
