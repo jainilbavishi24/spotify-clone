@@ -1,0 +1,8 @@
+[build]
+builder = "nixpacks"
+buildCommand = "cd backend && cargo build --release"
+
+[deploy]
+startCommand = "cd backend && ./target/release/spotify-clone-backend"
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10
