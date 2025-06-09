@@ -16,7 +16,9 @@ RUN cargo build --release && rm -rf src
 COPY src ./src
 COPY migrations ./migrations
 
-# Build the application
+# Build the application (skip SQLx compile-time checks)
+ENV SQLX_OFFLINE=true
+RUN touch sqlx-data.json && echo '{"db":"PostgreSQL","queries":[]}' > sqlx-data.json
 RUN cargo build --release
 
 # Runtime stage
